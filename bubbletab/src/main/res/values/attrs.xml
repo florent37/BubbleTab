@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BubbleTab">
+        <attr name="bubbleTab_selectedColor" format="color"/>
+        <attr name="bubbleTab_unselectedColor" format="color"/>
+        <attr name="bubbleTab_circleColor" format="color"/>
+        <attr name="bubbleTab_circleRatio" format="float"/>
+        <attr name="bubbleTab_image0" format="integer|reference"/>
+        <attr name="bubbleTab_image0Color" format="integer|reference"/>
+        <attr name="bubbleTab_image1" format="integer|reference"/>
+        <attr name="bubbleTab_image2" format="integer|reference"/>
+        <attr name="bubbleTab_image3" format="integer|reference"/>
+        <attr name="bubbleTab_image4" format="integer|reference"/>
+        <attr name="bubbleTab_image5" format="integer|reference"/>
+        <attr name="bubbleTab_image6" format="integer|reference"/>
+        <attr name="bubbleTab_image7" format="integer|reference"/>
+        <attr name="bubbleTab_image8" format="integer|reference"/>
+        <attr name="bubbleTab_image9" format="integer|reference"/>
+        <attr name="bubbleTab_image10" format="integer|reference"/>
+    </declare-styleable>
+</resources>
