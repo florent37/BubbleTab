@@ -45,6 +45,22 @@ Then bound it with your viewPager
 bubbleTab.setupWithViewPager(viewPager);
 ```
 
+## 
+
+To display your home icon with a different color / content if selected / unselected
+
+Add a different drawable into `bubbleTab_image0Colored`
+
+[![screen](https://raw.githubusercontent.com/florent37/BubbleTab/master/media/different_icon.gif)](https://github.com/florent37/BubbleTab)
+
+```xml
+<com.github.florent37.bubbletab.BubbleTab
+        
+        app:bubbleTab_image0="@drawable/ìc_normal"
+        app:bubbleTab_image0Colored="@drawable/ic_selected"
+                
+```
+
 #Download
 
 In your module [![Download](https://api.bintray.com/packages/florent37/maven/FiftyShadesOf/images/download.svg)](https://bintray.com/florent37/maven/FiftyShadesOf/_latestVersion)

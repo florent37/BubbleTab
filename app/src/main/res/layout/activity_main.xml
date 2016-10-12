@@ -16,7 +16,8 @@
 
         app:bubbleTab_circleColor="@color/colorAccent"
         app:bubbleTab_circleRatio="1.25"
-        app:bubbleTab_image0="@drawable/ic_home"
+        app:bubbleTab_image0="@drawable/ic_hourglass_empty"
+        app:bubbleTab_image0Colored="@drawable/ic_hourglass_full"
         app:bubbleTab_image1="@drawable/ic_account"
         app:bubbleTab_image2="@drawable/ic_event"
         app:bubbleTab_image3="@drawable/ic_search"

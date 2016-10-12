@@ -74,7 +74,7 @@ public class BubbleTab extends FrameLayout {
                         }
                     } else {
                         if (setting.firstIconDifferent && position == 0) {
-                            icons.get(position).setImageResource(setting.image0Color);
+                            icons.get(position).setImageResource(setting.image0Colored);
                         } else {
                             icons.get(position).setColorFilter(setting.unselectedColor);
                         }
@@ -87,7 +87,7 @@ public class BubbleTab extends FrameLayout {
                         icons.get(position).setColorFilter(setting.selectedColor);
                         if (position - 1 > 0) {
                             if (setting.firstIconDifferent && position - 1 == 0) {
-                                icons.get(position - 1).setImageResource(setting.image0Color);
+                                icons.get(position - 1).setImageResource(setting.image0Colored);
                             } else {
                                 icons.get(position - 1).setColorFilter(setting.unselectedColor);
                             }
@@ -229,7 +229,7 @@ public class BubbleTab extends FrameLayout {
         float circleRatio;
         boolean firstIconDifferent;
         List<Integer> images;
-        @DrawableRes int image0Color;
+        @DrawableRes int image0Colored;
 
         public Setting(Context context, AttributeSet attrs) {
             images = new ArrayList<>();
@@ -239,7 +239,7 @@ public class BubbleTab extends FrameLayout {
                 unselectedColor = array.getColor(R.styleable.BubbleTab_bubbleTab_unselectedColor, Color.parseColor("#c0c0c0"));
                 circleColor = array.getInt(R.styleable.BubbleTab_bubbleTab_circleColor, Color.BLACK);
                 circleRatio = array.getFloat(R.styleable.BubbleTab_bubbleTab_circleRatio, 1.2f);
-                image0Color = array.getResourceId(R.styleable.BubbleTab_bubbleTab_image0Color, 0);
+                image0Colored = array.getResourceId(R.styleable.BubbleTab_bubbleTab_image0Colored, 0);
                 add(array, R.styleable.BubbleTab_bubbleTab_image0);
                 add(array, R.styleable.BubbleTab_bubbleTab_image1);
                 add(array, R.styleable.BubbleTab_bubbleTab_image2);
@@ -253,7 +253,7 @@ public class BubbleTab extends FrameLayout {
                 add(array, R.styleable.BubbleTab_bubbleTab_image10);
                 array.recycle();
 
-                firstIconDifferent = image0Color != 0;
+                firstIconDifferent = image0Colored != 0;
             }
         }
 
