@@ -45,7 +45,7 @@ Then bound it with your viewPager
 bubbleTab.setupWithViewPager(viewPager);
 ```
 
-## 
+# Customisation
 
 To display your home icon with a different color / content if selected / unselected
 
