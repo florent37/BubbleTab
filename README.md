@@ -1,6 +1,6 @@
 # BubbleTab
 
-Unusual & fluent tabs for Android
+Put some bubble in your tabs and give your apps a supa fresh style !
 
 [![screen](https://raw.githubusercontent.com/florent37/BubbleTab/master/media/withScreen_cropped.png)](https://github.com/florent37/BubbleTab)
 
