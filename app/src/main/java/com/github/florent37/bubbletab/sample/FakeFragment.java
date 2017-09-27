@@ -9,8 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.florent37.bubbletab.sample.R;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -24,7 +22,7 @@ public class FakeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.page, container, false);
+        return inflater.inflate(R.layout.bubbletab_page, container, false);
     }
 
     @Override
@@ -36,7 +34,7 @@ public class FakeFragment extends Fragment {
         recyclerView.setAdapter(new RecyclerView.Adapter() {
             @Override
             public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                View cell = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell, parent, false);
+                View cell = LayoutInflater.from(parent.getContext()).inflate(R.layout.bubbletab_cell, parent, false);
                 return new RecyclerView.ViewHolder(cell){};
             }
 
