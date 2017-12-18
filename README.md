@@ -65,14 +65,14 @@ Add a different drawable into `bubbleTab_image0Colored`
                 
 ```
 
-#Download
+# Download
 
 In your module [![Download](https://api.bintray.com/packages/florent37/maven/BubbleTab/images/download.svg)](https://bintray.com/florent37/maven/BubbleTab/_latestVersion)
 ```groovy
 compile 'com.github.florent37:bubbletab:1.0.0'
 ```
 
-#Credits
+# Credits
 
 Author: Florent Champigny [http://www.florentchampigny.com/](http://www.florentchampigny.com/)
 
