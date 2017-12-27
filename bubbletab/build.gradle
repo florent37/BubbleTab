@@ -1,18 +1,55 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.2"
+    compileSdkVersion project.sdk
+    buildToolsVersion project.buildTools
+
     defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 26
+        minSdkVersion project.minSdk
+        targetSdkVersion project.sdk
         versionCode 1
         versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
     }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:26.1.0'
+    compile 'com.android.support:appcompat-v7:'+project.supportVersion
 }
+
+version = project.libraryVersion
+
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'BubbleTab'
+    orgName = 'florent37'
+
+    publishedGroupId = 'com.github.florent37'
+    libraryName = 'BubbleTab'
+    artifact = 'bubbletab'
+
+    libraryDescription = 'BubbleTab'
+
+    siteUrl = 'https://github.com/florent37/BubbleTab'
+    gitUrl = 'https://github.com/florent37/BubbleTab.git'
+
+    libraryVersion = rootProject.ext.libraryVersion
+
+    developerId = 'florent37'
+    developerName = 'Florent Champigny'
+    developerEmail = 'champigny.florent@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+apply from: rootProject.file('gradle/install-v1.gradle')
+apply from: rootProject.file('gradle/bintray-android-v1.gradle')

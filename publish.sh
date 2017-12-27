@@ -1,0 +1,1 @@
+./gradlew clean :bubbletab:assembleDebug :bubbletab:install :bubbletab:bintrayUpload
