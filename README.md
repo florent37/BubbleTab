@@ -17,7 +17,6 @@ Add a BubbleTab with your icons on the layout.xml
 Customisable parameters :
 - circleColor
 - circleRatio
-- image(0-10)
 
 ```xml
 <com.github.florent37.bubbletab.BubbleTab
@@ -30,17 +29,49 @@ Customisable parameters :
 
         app:bubbleTab_circleColor="@color/colorAccent"
         app:bubbleTab_circleRatio="1.25"
-        app:bubbleTab_image0="@drawable/ic_home"
-        app:bubbleTab_image1="@drawable/ic_account"
-        app:bubbleTab_image2="@drawable/ic_event"
-        app:bubbleTab_image3="@drawable/ic_search"
-        app:bubbleTab_image4="@drawable/ic_query"
-        />
+        >
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewPager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="16dp"
+                    android:src="@drawable/bubbletab_ic_hourglass_selector" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="16dp"
+                    android:src="@drawable/bubbletab_ic_event_selector" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="16dp"
+                    android:src="@drawable/bubbletab_ic_query_selector" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="16dp"
+                    android:src="@drawable/bubbletab_ic_search_selector" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="16dp"
+                    android:src="@drawable/bubbletab_ic_home_selector" />
+
+</com.github.florent37.bubbletab.BubbleTab>
+
+<android.support.v4.view.ViewPager
+    android:id="@+id/viewPager"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
 ```
 
 Then bound it with your viewPager
@@ -53,23 +84,23 @@ bubbleTab.setupWithViewPager(viewPager);
 
 To display your home icon with a different color / content if selected / unselected
 
-Add a different drawable into `bubbleTab_image0Colored`
+Simply use selectors !
 
 [![screen](https://raw.githubusercontent.com/florent37/BubbleTab/master/media/different_icon.gif)](https://github.com/florent37/BubbleTab)
 
 ```xml
-<com.github.florent37.bubbletab.BubbleTab
-        
-        app:bubbleTab_image0="@drawable/ìc_normal"
-        app:bubbleTab_image0Colored="@drawable/ic_selected"
-                
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_selected="true" android:drawable="@drawable/bubbletab_ic_account_selected"/>
+    <item android:drawable="@drawable/bubbletab_ic_account"/>
+</selector>
 ```
 
-#Download
+# Download
 
 In your module [![Download](https://api.bintray.com/packages/florent37/maven/BubbleTab/images/download.svg)](https://bintray.com/florent37/maven/BubbleTab/_latestVersion)
 ```groovy
-compile 'com.github.florent37:bubbletab:1.0.0'
+compile 'com.github.florent37:bubbletab:1.0.1'
 ```
 
 #Credits

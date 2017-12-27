@@ -13,16 +13,47 @@
         android:clipToPadding="false"
         android:background="@android:color/white"
         android:elevation="10dp"
-
         app:bubbleTab_circleColor="@color/colorAccent"
         app:bubbleTab_circleRatio="1.25"
-        app:bubbleTab_image0="@drawable/bubbletab_ic_hourglass_empty"
-        app:bubbleTab_image0Colored="@drawable/bubbletab_ic_hourglass_full"
-        app:bubbleTab_image1="@drawable/bubbletab_ic_account"
-        app:bubbleTab_image2="@drawable/bubbletab_ic_event"
-        app:bubbleTab_image3="@drawable/bubbletab_ic_search"
-        app:bubbleTab_image4="@drawable/bubbletab_ic_query"
-        />
+        >
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="16dp"
+            android:src="@drawable/bubbletab_ic_hourglass_selector" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="16dp"
+            android:src="@drawable/bubbletab_ic_event_selector" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="16dp"
+            android:src="@drawable/bubbletab_ic_query_selector" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="16dp"
+            android:src="@drawable/bubbletab_ic_search_selector" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="16dp"
+            android:src="@drawable/bubbletab_ic_home_selector" />
+
+    </com.github.florent37.bubbletab.BubbleTab>
+
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPager"

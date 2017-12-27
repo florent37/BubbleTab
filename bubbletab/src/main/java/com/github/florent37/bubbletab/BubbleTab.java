@@ -2,7 +2,9 @@ package com.github.florent37.bubbletab;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
@@ -10,102 +12,79 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BubbleTab extends FrameLayout {
+public class BubbleTab extends LinearLayout {
 
     int numberOfIcons = 0;
-
-    ViewGroup iconsLayout;
-    ImageView circle;
-
-    Setting setting;
-    List<ImageView> icons;
-
-    @Nullable ViewPager viewPager;
-    int circleWidth;
-    int viewPagerWidth;
+    @Nullable
+    ViewPager viewPager;
     int tabWidth;
-    int barHeight;
-    float toCenterCircleX;
-    float toCenterCircleY;
-    ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
+    private Circle circle = new Circle();
+    private Setting setting;
+    private List<View> icons;
+    private final ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
 
         float oldPositionOffset;
         boolean toRight;
 
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            Log.d("percent", "" + positionOffset);
+            //Log.d("percent", "" + positionOffset);
 
             if (oldPositionOffset == 0) {
                 toRight = positionOffset > oldPositionOffset;
             }
+            if (tabWidth == 0 && numberOfIcons != 0) {
+                tabWidth = getWidth() / numberOfIcons;
+
+                circle.setWidth(tabWidth);
+            }
 
             float x = position * tabWidth + tabWidth * positionOffset;
-            circle.setTranslationX(x - toCenterCircleX);
-            circle.setTranslationY(-toCenterCircleY);
+            circle.setTranslationX(x);
 
             float distanceFromMiddle = Math.abs(positionOffset - 0.5f);
             float min = 0f;
             float scale = min + (1 - min) * (distanceFromMiddle + 0.5f);
 
-            circle.setScaleX(scale);
-            circle.setScaleY(scale);
+            circle.setScale(scale);
 
             if (positionOffset != 0) {
                 if (toRight) {
                     if (positionOffset < 0.5f) {
-                        if (setting.firstIconDifferent && position == 0) {
-                            icons.get(position).setImageResource(setting.images.get(0));
-                        } else {
-                            icons.get(position).setColorFilter(setting.selectedColor);
-                        }
+                        icons.get(position).setSelected(true);
                         if (position + 1 < numberOfIcons) {
-                            icons.get(position + 1).setColorFilter(setting.unselectedColor);
+                            icons.get(position + 1).setSelected(false);
                         }
                     } else {
-                        if (setting.firstIconDifferent && position == 0) {
-                            icons.get(position).setImageResource(setting.image0Colored);
-                        } else {
-                            icons.get(position).setColorFilter(setting.unselectedColor);
-                        }
+                        icons.get(position).setSelected(false);
                         if (position + 1 < numberOfIcons) {
-                            icons.get(position + 1).setColorFilter(setting.selectedColor);
+                            icons.get(position + 1).setSelected(true);
                         }
                     }
                 } else {
                     if (positionOffset < 0.5f) {
-                        icons.get(position).setColorFilter(setting.selectedColor);
+                        icons.get(position).setSelected(true);
                         if (position - 1 > 0) {
-                            if (setting.firstIconDifferent && position - 1 == 0) {
-                                icons.get(position - 1).setImageResource(setting.image0Colored);
-                            } else {
-                                icons.get(position - 1).setColorFilter(setting.unselectedColor);
-                            }
+                            icons.get(position + 1).setSelected(false);
                         }
                     } else {
-                        icons.get(position).setColorFilter(setting.unselectedColor);
+                        icons.get(position).setSelected(false);
                         if (position - 1 > 0) {
-                            if (setting.firstIconDifferent && position - 1 == 0) {
-                                icons.get(position - 1).setImageResource(setting.images.get(0));
-                            } else {
-                                icons.get(position - 1).setColorFilter(setting.selectedColor);
-                            }
+                            icons.get(position + 1).setSelected(true);
                         }
                     }
                 }
             }
 
             oldPositionOffset = positionOffset;
+            postInvalidate();
         }
 
         @Override
@@ -137,32 +116,15 @@ public class BubbleTab extends FrameLayout {
     public void setupWithViewPager(final ViewPager viewPager) {
         this.viewPager = viewPager;
 
-        getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
-                if (numberOfIcons != 0) {
-                    viewPagerWidth = viewPager.getWidth();
-                    tabWidth = viewPagerWidth / numberOfIcons;
-
-                    ViewGroup.LayoutParams circleLayoutParams = circle.getLayoutParams();
-                    circleWidth = (int) (tabWidth * setting.circleRatio);
-                    circleLayoutParams.width = circleWidth;
-                    circleLayoutParams.height = circleWidth;
-                    circle.setLayoutParams(circleLayoutParams);
-                    barHeight = getHeight();
-
-                    toCenterCircleX = (circleWidth - tabWidth) / 2f;
-                    toCenterCircleY = (circleWidth - barHeight) / 2f;
-
-                    circle.setTranslationX(-toCenterCircleX);
-                    circle.setTranslationY(-toCenterCircleY);
-                }
-                getViewTreeObserver().removeOnPreDrawListener(this);
-                return false;
-            }
-        });
-
         viewPager.addOnPageChangeListener(pageChangeListener);
+
+        final int currentItem = viewPager.getCurrentItem();
+        for (int i = 0; i < icons.size(); i++) {
+            icons.get(i).setSelected(i == currentItem);
+        }
+
+        circle.setTranslationX(tabWidth * currentItem);
+        postInvalidate();
     }
 
     @Override
@@ -176,42 +138,26 @@ public class BubbleTab extends FrameLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        inflate(getContext(), R.layout.bubbletab_layout, this);
 
-        iconsLayout = (ViewGroup) findViewById(R.id.iconsLayout);
-        circle = (ImageView) findViewById(R.id.circle);
+        circle.setColor(setting.circleColor);
+        circle.setRatio(setting.circleRatio);
 
-        circle.setColorFilter(setting.circleColor);
-        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-
-        numberOfIcons = setting.images.size();
-        icons = new ArrayList<>(numberOfIcons);
-        for (int i = 0; i < numberOfIcons; ++i) {
-            ImageView icon = (ImageView) layoutInflater.inflate(R.layout.bubbletab_icon, iconsLayout, false);
-            icons.add(icon);
-            iconsLayout.addView(icon);
-
-            final int position = i;
-            int imageRes = setting.images.get(position);
-            icon.setVisibility(View.VISIBLE);
-            icon.setImageResource(imageRes);
-            if (position > 0) {
-                icon.setColorFilter(setting.unselectedColor);
-            } else if (!setting.firstIconDifferent) {
-                icon.setColorFilter(setting.selectedColor);
-            }
-            icon.setOnClickListener(new OnClickListener() {
+        numberOfIcons = getChildCount();
+        icons = new ArrayList<>();
+        for (int i = 0; i < numberOfIcons; i++) {
+            final int index = i;
+            final View childAt = getChildAt(index);
+            icons.add(childAt);
+            childAt.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (viewPager != null) {
-                        viewPager.setCurrentItem(position, true);
+                        viewPager.setCurrentItem(index, true);
                     }
                 }
             });
         }
 
-        int padding = (int) dpToPx(8);
-        icons.get(0).setPadding(padding, padding, padding, padding);
     }
 
     protected float dpToPx(int dp) {
@@ -219,17 +165,77 @@ public class BubbleTab extends FrameLayout {
     }
 
     private void init(Context context, AttributeSet attrs) {
+        setWillNotDraw(false);
         setting = new Setting(context, attrs);
     }
 
+    @Override
+    protected void onDraw(Canvas canvas) {
+        circle.onDraw(canvas);
+        super.onDraw(canvas);
+    }
+
+    private static class Circle {
+
+        private Paint paint = new Paint();
+
+        private float translationX = 1f;
+        private int width;
+        private float circleRatio = 1f;
+        private float scale = 1f;
+
+        public Circle() {
+            paint.setColor(Color.BLACK);
+            paint.setAntiAlias(true);
+            paint.setStrokeWidth(1);
+            paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        }
+
+        public void onDraw(Canvas canvas) {
+            canvas.save();
+            canvas.translate(translationX, 0);
+            final int height = canvas.getHeight();
+            canvas.drawCircle(width / 2f, height / 2f, (width / 2f) * circleRatio * scale, paint);
+            canvas.restore();
+        }
+
+        public void setTranslationX(float translationX) {
+            this.translationX = translationX;
+        }
+
+        public void setWidth(int width) {
+            this.width = width;
+        }
+
+        public int getColor() {
+            return paint.getColor();
+        }
+
+        public void setColor(int color) {
+            paint.setColor(color);
+        }
+
+        public void setRatio(float circleRatio) {
+            this.circleRatio = circleRatio;
+        }
+
+        public void setScale(float scale) {
+            this.scale = scale;
+        }
+    }
+
     static class Setting {
-        @ColorInt int selectedColor;
-        @ColorInt int unselectedColor;
-        @ColorInt int circleColor;
+        @ColorInt
+        int selectedColor;
+        @ColorInt
+        int unselectedColor;
+        @ColorInt
+        int circleColor;
         float circleRatio;
         boolean firstIconDifferent;
         List<Integer> images;
-        @DrawableRes int image0Colored;
+        @DrawableRes
+        int image0Colored;
 
         public Setting(Context context, AttributeSet attrs) {
             images = new ArrayList<>();
