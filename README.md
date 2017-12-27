@@ -103,7 +103,7 @@ In your module [![Download](https://api.bintray.com/packages/florent37/maven/Bub
 compile 'com.github.florent37:bubbletab:1.0.2'
 ```
 
-#Credits
+# Credits
 
 Author: Florent Champigny [http://www.florentchampigny.com/](http://www.florentchampigny.com/)
 
