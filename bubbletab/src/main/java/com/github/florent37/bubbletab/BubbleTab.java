@@ -30,16 +30,10 @@ public class BubbleTab extends LinearLayout {
     private List<View> icons;
     private final ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
 
-        float oldPositionOffset;
-        boolean toRight;
-
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             //Log.d("percent", "" + positionOffset);
 
-            if (oldPositionOffset == 0) {
-                toRight = positionOffset > oldPositionOffset;
-            }
             if (tabWidth == 0 && numberOfIcons != 0) {
                 tabWidth = getWidth() / numberOfIcons;
 
@@ -56,34 +50,23 @@ public class BubbleTab extends LinearLayout {
             circle.setScale(scale);
 
             if (positionOffset != 0) {
-                if (toRight) {
-                    if (positionOffset < 0.5f) {
-                        icons.get(position).setSelected(true);
-                        if (position + 1 < numberOfIcons) {
-                            icons.get(position + 1).setSelected(false);
-                        }
-                    } else {
-                        icons.get(position).setSelected(false);
-                        if (position + 1 < numberOfIcons) {
-                            icons.get(position + 1).setSelected(true);
-                        }
+                if (positionOffset < 0.5f) {
+                    icons.get(position).setSelected(true);
+                    if (position + 1 < numberOfIcons) {
+                        icons.get(position + 1).setSelected(false);
                     }
                 } else {
-                    if (positionOffset < 0.5f) {
-                        icons.get(position).setSelected(true);
-                        if (position - 1 > 0) {
-                            icons.get(position + 1).setSelected(false);
-                        }
-                    } else {
-                        icons.get(position).setSelected(false);
-                        if (position - 1 > 0) {
-                            icons.get(position + 1).setSelected(true);
-                        }
+                    icons.get(position).setSelected(false);
+                    if (position + 1 < numberOfIcons) {
+                        icons.get(position + 1).setSelected(true);
                     }
+                }
+            } else {
+                for(int i = 0; i < numberOfIcons; i++) {
+                    icons.get(i).setSelected(i == position);
                 }
             }
 
-            oldPositionOffset = positionOffset;
             postInvalidate();
         }
 
