@@ -24,36 +24,24 @@ public class BubbleTab extends LinearLayout {
     int numberOfIcons = 0;
     @Nullable
     ViewPager viewPager;
-    int tabWidth;
+
     private Circle circle = new Circle();
     private Setting setting;
     private List<View> icons;
-    private final ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
-
+    private final ChangeListener pageChangeListener = new ChangeListener();
+    private final class ChangeListener implements ViewPager.OnPageChangeListener {
         float oldPositionOffset;
         boolean toRight;
 
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            //Log.d("percent", "" + positionOffset);
+            //Log.d("onPageScrolled", position + " : " + positionOffset);
 
             if (oldPositionOffset == 0) {
                 toRight = positionOffset > oldPositionOffset;
             }
-            if (tabWidth == 0 && numberOfIcons != 0) {
-                tabWidth = getWidth() / numberOfIcons;
 
-                circle.setWidth(tabWidth);
-            }
-
-            float x = position * tabWidth + tabWidth * positionOffset;
-            circle.setTranslationX(x);
-
-            float distanceFromMiddle = Math.abs(positionOffset - 0.5f);
-            float min = 0f;
-            float scale = min + (1 - min) * (distanceFromMiddle + 0.5f);
-
-            circle.setScale(scale);
+            circle.layout(BubbleTab.this, position, positionOffset);
 
             if (positionOffset != 0) {
                 if (toRight) {
@@ -114,17 +102,29 @@ public class BubbleTab extends LinearLayout {
     }
 
     public void setupWithViewPager(final ViewPager viewPager) {
-        this.viewPager = viewPager;
+        if(this.viewPager != null)
+            this.viewPager.removeOnPageChangeListener(pageChangeListener);
 
-        viewPager.addOnPageChangeListener(pageChangeListener);
+        this.viewPager = viewPager;
+        this.viewPager.addOnPageChangeListener(pageChangeListener);
 
         final int currentItem = viewPager.getCurrentItem();
         for (int i = 0; i < icons.size(); i++) {
             icons.get(i).setSelected(i == currentItem);
         }
-
-        circle.setTranslationX(tabWidth * currentItem);
+        //no need to update here since we override "onLayout(...)"
+        //  but still we want to support change of pager more then ones
+        circle.layout(this, this.viewPager);
         postInvalidate();
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (viewPager != null) {
+            viewPager.addOnPageChangeListener(pageChangeListener);
+            postInvalidate();
+        }
     }
 
     @Override
@@ -157,7 +157,6 @@ public class BubbleTab extends LinearLayout {
                 }
             });
         }
-
     }
 
     protected float dpToPx(int dp) {
@@ -170,12 +169,20 @@ public class BubbleTab extends LinearLayout {
     }
 
     @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        super.onLayout(changed, l, t, r, b);
+        //prepare shape even before any "onPageScrolled(...)" event
+        circle.layout(this, viewPager);
+    }
+
+    @Override
     protected void onDraw(Canvas canvas) {
         circle.onDraw(canvas);
         super.onDraw(canvas);
     }
 
     private static class Circle {
+        public float lastOffset = 0f; //current shape-offset in percentage (from 0f to 1f)
 
         private Paint paint = new Paint();
 
@@ -221,6 +228,46 @@ public class BubbleTab extends LinearLayout {
 
         public void setScale(float scale) {
             this.scale = scale;
+        }
+
+
+        static int valueForFrame(int valueStart, int valueEnd, float frameStart, float frames, float currentFrame) {
+            return (int)( (valueEnd-valueStart)/frames * (currentFrame-frameStart) + valueStart );
+        }
+
+        public void layout(BubbleTab owner, int position, float positionOffset) {
+            int widthStart = 0; int widthEnd;
+            View c = owner.getChildAt(position);
+            if(c != null) {
+                widthStart = c.getWidth();
+                //animate to next tabs size and reverse
+                View next = owner.getChildAt(position+1);
+                if(next != null) {
+                    widthEnd = valueForFrame(widthStart, next.getWidth(), 0f, 1f, positionOffset);
+                } else {
+                    widthEnd = widthStart;
+                }
+                this.setWidth(widthEnd);
+            }
+
+            float x = c.getX() + widthStart * positionOffset;
+            this.setTranslationX(x);
+
+            float distanceFromMiddle = Math.abs(positionOffset - 0.5f);
+            float min = 0f;
+            float scale = min + (1 - min) * (distanceFromMiddle + 0.5f);
+
+            this.setScale(scale);
+            lastOffset = positionOffset;
+        }
+        //prepare shape based on "ViewPager" position
+        public void layout(BubbleTab owner, ViewPager viewPager) {
+            //get current Page-index
+            int position = viewPager != null ? viewPager.getCurrentItem() : 0;
+            //convert Page-index to position (position is always less than current Page-index)
+            if(position > 1)
+                position -= 1;
+            this.layout(owner, position, this.lastOffset);
         }
     }
 
