@@ -1,15 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion project.sdk
-    buildToolsVersion project.buildTools
+    compileSdkVersion sdk
+    buildToolsVersion '29.0.2'
 
     defaultConfig {
         minSdkVersion project.minSdk
         targetSdkVersion project.sdk
         applicationId "com.github.florent37.topnav"
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "2.0"
     }
     buildTypes {
         release {
@@ -17,15 +17,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    compile project(":bubbletab")
-    //compile 'com.github.florent37:bubbletab:1.0.0'
-    compile 'com.android.support:appcompat-v7:'+project.supportVersion
-    compile 'com.android.support:cardview-v7:'+project.supportVersion
-    compile 'com.android.support:recyclerview-v7:'+project.supportVersion
-    compile 'com.jakewharton:butterknife:7.0.1'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation 'junit:junit:4.12'
+    implementation project(":bubbletab")
+
+    implementation 'com.github.florent37:bubbletab:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
 }

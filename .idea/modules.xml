@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/BubbleTab.iml" filepath="$PROJECT_DIR$/BubbleTab.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/bubbletab/bubbletab.iml" filepath="$PROJECT_DIR$/bubbletab/bubbletab.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/BubbleTab.iml" filepath="$PROJECT_DIR$/.idea/modules/BubbleTab.iml" group="BubbleTab" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" group="BubbleTab/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/bubbletab/bubbletab.iml" filepath="$PROJECT_DIR$/.idea/modules/bubbletab/bubbletab.iml" group="BubbleTab/bubbletab" />
     </modules>
   </component>
 </project>
