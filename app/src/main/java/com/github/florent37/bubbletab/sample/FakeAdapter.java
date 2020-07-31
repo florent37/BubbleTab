@@ -1,13 +1,13 @@
 package com.github.florent37.bubbletab.sample;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 
 public class FakeAdapter extends FragmentStatePagerAdapter {
 
-    public FakeAdapter(FragmentManager fm) {
-        super(fm);
+    public FakeAdapter(FragmentManager fm, int behavior) {
+        super(fm, behavior);
     }
 
     @Override
