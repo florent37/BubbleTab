@@ -9,7 +9,8 @@ import android.graphics.Paint;
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
-import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
+
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
@@ -22,13 +23,13 @@ public class BubbleTab extends LinearLayout {
 
     int numberOfIcons = 0;
     @Nullable
-    ViewPager viewPager;
+    ViewPager2 viewPager;
 
     private Circle circle = new Circle();
     private Setting setting;
     private List<View> icons;
     private final ChangeListener pageChangeListener = new ChangeListener();
-    private final class ChangeListener implements ViewPager.OnPageChangeListener {
+    private final class ChangeListener extends ViewPager2.OnPageChangeCallback {
         int tabWidth;
 
         @Override
@@ -95,12 +96,12 @@ public class BubbleTab extends LinearLayout {
         init(context, attrs);
     }
 
-    public void setupWithViewPager(final ViewPager viewPager) {
+    public void setupWithViewPager(final ViewPager2 viewPager) {
         if(this.viewPager != null)
-            this.viewPager.removeOnPageChangeListener(pageChangeListener);
+            this.viewPager.unregisterOnPageChangeCallback(pageChangeListener);
 
         this.viewPager = viewPager;
-        this.viewPager.addOnPageChangeListener(pageChangeListener);
+        this.viewPager.registerOnPageChangeCallback(pageChangeListener);
 
         final int currentItem = viewPager.getCurrentItem();
         for (int i = 0; i < icons.size(); i++) {
@@ -116,7 +117,7 @@ public class BubbleTab extends LinearLayout {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         if (viewPager != null) {
-            viewPager.addOnPageChangeListener(pageChangeListener);
+            viewPager.registerOnPageChangeCallback(pageChangeListener);
             postInvalidate();
         }
     }
@@ -125,7 +126,7 @@ public class BubbleTab extends LinearLayout {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         if (viewPager != null) {
-            viewPager.removeOnPageChangeListener(pageChangeListener);
+            viewPager.unregisterOnPageChangeCallback(pageChangeListener);
         }
     }
 
@@ -142,12 +143,9 @@ public class BubbleTab extends LinearLayout {
             final int index = i;
             final View childAt = getChildAt(index);
             icons.add(childAt);
-            childAt.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (viewPager != null) {
-                        viewPager.setCurrentItem(index, true);
-                    }
+            childAt.setOnClickListener(v -> {
+                if (viewPager != null) {
+                    viewPager.setCurrentItem(index, true);
                 }
             });
         }
@@ -178,7 +176,7 @@ public class BubbleTab extends LinearLayout {
     private static class Circle {
         public float lastOffset = 0f; //current shape-offset in percentage (from 0f to 1f)
 
-        private Paint paint = new Paint();
+        private final Paint paint = new Paint();
 
         private float translationX = 1f;
         private int width;
@@ -255,7 +253,7 @@ public class BubbleTab extends LinearLayout {
             lastOffset = positionOffset;
         }
         //prepare shape based on "ViewPager" position
-        public void layout(BubbleTab owner, ViewPager viewPager) {
+        public void layout(BubbleTab owner, ViewPager2 viewPager) {
             //get current Page-index
             int position = viewPager != null ? viewPager.getCurrentItem() : 0;
             //convert Page-index to position (position is always less than current Page-index)
