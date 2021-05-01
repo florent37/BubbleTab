@@ -164,7 +164,8 @@ public class BubbleTab extends LinearLayout {
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
         //prepare shape even before any "onPageScrolled(...)" event
-        circle.layout(this, viewPager);
+        if (changed)
+            circle.layout(this, viewPager);
     }
 
     @Override
