@@ -1,17 +1,21 @@
 package com.github.florent37.bubbletab.sample;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-public class FakeAdapter extends FragmentStatePagerAdapter {
+public class FakeAdapter extends FragmentStateAdapter {
 
-    public FakeAdapter(FragmentManager fm, int behavior) {
-        super(fm, behavior);
+    public FakeAdapter(FragmentActivity fragmentActivity) {
+        super(fragmentActivity);
     }
 
+    @NonNull
     @Override
-    public Fragment getItem(int position) {
+    public Fragment createFragment(int position) {
         switch (position){
             default:
                 return FakeFragment.newInstance();
@@ -19,7 +23,7 @@ public class FakeAdapter extends FragmentStatePagerAdapter {
     }
 
     @Override
-    public int getCount() {
+    public int getItemCount() {
         return 5;
     }
 }
