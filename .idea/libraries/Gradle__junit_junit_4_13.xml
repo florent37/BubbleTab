@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="Gradle: junit:junit:4.13@jar">
+  <library name="Gradle: junit:junit:4.13">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/junit/junit/4.13/e49ccba652b735c93bd6e6f59760d8254cf597dd/junit-4.13.jar!/" />
     </CLASSES>
